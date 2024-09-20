@@ -92,12 +92,12 @@ function BuildExes() {
     cargo build --locked --release --target $target --features ui_access
     Move-Item -Force -Path "$sourceDir/glazewm.exe", "$sourceDir/glazewm-watcher.exe" -Destination "$outDir/console"
 
-    SignFiles @(
-      "$outDir/noconsole/glazewm.exe",
-      "$outDir/noconsole/glazewm-watcher.exe",
-      "$outDir/console/glazewm.exe",
-      "$outDir/console/glazewm-watcher.exe"
-    )
+    # SignFiles @(
+    #   "$outDir/noconsole/glazewm.exe",
+    #   "$outDir/noconsole/glazewm-watcher.exe",
+    #   "$outDir/console/glazewm.exe",
+    #   "$outDir/console/glazewm-watcher.exe"
+    # )
   }
 }
 
@@ -113,7 +113,7 @@ function BuildInstallers() {
       -d EXE_DIR="out/$arch"
   }
 
-  SignFiles @("out/installer-x64.msi", "out/installer-arm64.msi")
+  # SignFiles @("out/installer-x64.msi", "out/installer-arm64.msi")
 
   Write-Output "Creating universal installer"
   wix build -arch "x64" -ext WixToolset.BootstrapperApplications.wixext `
@@ -122,13 +122,13 @@ function BuildInstallers() {
 
   Write-Output "Detaching & reattaching Burn engine for signing"
   wix burn detach "./out/unsigned-installer-universal.exe" -engine "./out/engine.exe"
-  SignFiles @("out/engine.exe")
+  # SignFiles @("out/engine.exe")
 
   wix burn reattach "./out/unsigned-installer-universal.exe" `
     -engine "./out/engine.exe" `
     -o "./out/installer-universal.exe"
 
-  SignFiles @("out/installer-universal.exe")
+  # SignFiles @("out/installer-universal.exe")
 }
 
 function Package() {
